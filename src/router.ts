@@ -1,21 +1,18 @@
 import { Application } from "express";
-import fs from "fs";
-import path from "path";
+import { readdirSync } from "fs";
+import { join } from "path";
 
-const router = async (app: Application) =>
-	new Promise<Application>((resolve, reject) => {
-		fs.readdir(path.join(__dirname, "controllers"), (err, dir) => {
-			const controllers = dir.filter((file) => /Controller/.test(file));
-			controllers.forEach((controller) => {
-				const route = require(path.join(
-					__dirname,
-					"controllers",
-					controller
-				)).default;
-				app.use(`/${controller.split("Controller")[0]}`, route);
-				resolve(app);
-			});
+const router = (app: Application) =>
+	new Promise<Application>((resolve) => {
+		const dir = readdirSync(join(__dirname, "controllers"));
+		dir.forEach((filename) => {
+			if (!/Controller/.test(filename)) return;
+			app.use(
+				`/${filename.split("Controller")[0]}`,
+				require(join(__dirname, "controllers", filename)).default
+			);
 		});
+		resolve(app);
 	});
 
 export default router;
