@@ -1,6 +1,5 @@
-import sql, { config, Request } from "mssql";
-import dotenv from "dotenv";
-dotenv.config();
+import sql, { config } from "mssql";
+import "dotenv/config";
 
 const config: config = {
 	user: process.env.DB_USER,
@@ -13,7 +12,4 @@ const config: config = {
 	},
 };
 
-export default () =>
-	new Promise<Request>(async (resolve) =>
-		resolve((await sql.connect(config)).request())
-	);
+export default async () => (await sql.connect(config)).request();
