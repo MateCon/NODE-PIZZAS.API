@@ -1,16 +1,16 @@
-import sql from "mssql";
+import sql, { IRecordSet } from "mssql";
 import connect from "../utils/database";
 import { Pizza } from "../models/pizza";
 
 const pizzaTabla = process.env.DB_TABLA_PIZZA;
 
-export const getPizza = async () => {
+export const getPizza = async (): Promise<IRecordSet<any>> => {
 	const connection = await connect();
-	const response = await connection.query(`SELECT * from Pizzas`);
+	const response = await connection.query(`SELECT * from ${pizzaTabla}`);
 	return response.recordset;
 };
 
-export const getPizzaById = async (id: number) => {
+export const getPizzaById = async (id: number): Promise<any> => {
 	const connection = await connect();
 	const response = await connection
 		.input("id", sql.Int, id)
@@ -18,7 +18,7 @@ export const getPizzaById = async (id: number) => {
 	return response.recordset[0];
 };
 
-export const createPizza = async (pizza: Pizza) => {
+export const createPizza = async (pizza: Pizza): Promise<IRecordSet<any>> => {
 	const connection = await connect();
 	const response = await connection
 		.input("Nombre", sql.NChar, pizza?.nombre ?? "")
@@ -31,7 +31,10 @@ export const createPizza = async (pizza: Pizza) => {
 	return response.recordset;
 };
 
-export const updatePizzaById = async (id: number, pizza: Pizza) => {
+export const updatePizzaById = async (
+	id: number,
+	pizza: Pizza
+): Promise<IRecordSet<any>> => {
 	const connection = await connect();
 	const response = await connection
 		.input("id", sql.Int, id)
@@ -45,7 +48,7 @@ export const updatePizzaById = async (id: number, pizza: Pizza) => {
 	return response.recordset;
 };
 
-export const deletePizzaById = async (id: number) => {
+export const deletePizzaById = async (id: number): Promise<IRecordSet<any>> => {
 	const connection = await connect();
 	const response = await connection
 		.input("id", sql.Int, id)
