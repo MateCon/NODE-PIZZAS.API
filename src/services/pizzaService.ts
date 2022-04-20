@@ -6,7 +6,7 @@ const pizzaTabla = process.env.DB_TABLA_PIZZA;
 
 export const getPizza = async () => {
 	const connection = await connect();
-	const response = await connection.query(`SELECT * from ${pizzaTabla}`);
+	const response = await connection.query(`SELECT * from Pizzas`);
 	return response.recordset;
 };
 

@@ -9,7 +9,7 @@ import {
 
 const router = Router();
 
-router.get("", async (req, res) => {
+router.get("/", async (req, res) => {
 	console.log(`This is a get operation`);
 
 	const pizzas = await getPizza();
