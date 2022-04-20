@@ -21,10 +21,10 @@ export const getPizzaById = async (id: number): Promise<any> => {
 export const createPizza = async (pizza: Pizza): Promise<IRecordSet<any>> => {
 	const connection = await connect();
 	const response = await connection
-		.input("Nombre", sql.NChar, pizza?.nombre ?? "")
-		.input("LibreGluten", sql.Bit, pizza?.libreGluten ?? false)
-		.input("Importe", sql.NChar, pizza?.importe ?? 0)
-		.input("Descripcion", sql.NChar, pizza?.description ?? "")
+		.input("Nombre", sql.NChar, pizza.nombre ?? "")
+		.input("LibreGluten", sql.Bit, pizza.libreGluten ?? false)
+		.input("Importe", sql.NChar, pizza.importe ?? 0)
+		.input("Descripcion", sql.NChar, pizza.description ?? "")
 		.query(
 			`INSERT INTO ${pizzaTabla}(Nombre, LibreGluten, Importe, Descripcion) VALUES (@Nombre, @LibreGluten, @Importe, @Descripcion)`
 		);
@@ -38,10 +38,10 @@ export const updatePizzaById = async (
 	const connection = await connect();
 	const response = await connection
 		.input("id", sql.Int, id)
-		.input("Nombre", sql.NChar, pizza?.nombre ?? "")
-		.input("LibreGluten", sql.Bit, pizza?.libreGluten ?? false)
-		.input("Importe", sql.NChar, pizza?.importe ?? 0)
-		.input("Descripcion", sql.NChar, pizza?.description ?? "")
+		.input("Nombre", sql.NChar, pizza.nombre ?? "")
+		.input("LibreGluten", sql.Bit, pizza.libreGluten ?? false)
+		.input("Importe", sql.NChar, pizza.importe ?? 0)
+		.input("Descripcion", sql.NChar, pizza.description ?? "")
 		.query(
 			`UPDATE Pizzas SET Nombre = @Nombre, LibreGluten = @LibreGluten, Importe = @Importe, Descripcion = @Descripcion WHERE id = @Id`
 		);
