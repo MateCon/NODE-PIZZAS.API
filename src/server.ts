@@ -3,7 +3,7 @@ import cors from "cors";
 import router from "./router";
 
 (async () => {
-	const app: Application = await router(express());
+	const app: Application = router(express());
 	const port = 8080 || process.env.PORT;
 
 	app.use(cors());
