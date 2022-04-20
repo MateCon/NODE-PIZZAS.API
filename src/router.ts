@@ -2,12 +2,14 @@ import { Application } from "express";
 import { readdirSync } from "fs";
 import { join } from "path";
 
+const controllerFolder = join(__dirname, "controllers");
+
 const router = (app: Application): Application => {
-	readdirSync(join(__dirname, "controllers")).forEach((filename) => {
-		if (!/Controller/.test(filename)) return;
+	readdirSync(controllerFolder).forEach((file: string) => {
+		if (!/Controller/.test(file)) return;
 		app.use(
-			`/${filename.split("Controller")[0]}`,
-			require(join(__dirname, "controllers", filename)).default
+			`/${file.split("Controller")[0]}`,
+			require(join(controllerFolder, file)).default
 		);
 	});
 	return app;
