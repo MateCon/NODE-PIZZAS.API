@@ -8,8 +8,8 @@ const config: config = {
 	database: process.env.DB_NAME,
 	server: process.env.DB_SERVER || "localhost",
 	options: {
-		encrypt: true,
 		trustServerCertificate: true,
+		trustedConnection: true,
 	},
 };
 

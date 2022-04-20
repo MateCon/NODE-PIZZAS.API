@@ -1,38 +1,76 @@
 import { Request, Response, Router } from "express";
-import { getPizza, getPizzas } from "../services/pizzaService";
+import {
+	createPizza,
+	getPizza,
+	getPizzaById,
+	updatePizzaById,
+	deletePizzaById,
+} from "../services/pizzaService";
 
-const route = Router();
+const router = Router();
 
-route.get("/", (_, res) => {
-	res.send("hello");
+router.get("", async (req, res) => {
+	console.log(`This is a get operation`);
+
+	const pizzas = await getPizza();
+
+	return res.status(200).json(pizzas);
 });
 
-route.get("/all", async (_, res) => {
-	try {
-		res.status(200).json(await getPizzas());
-	} catch (err) {
-		console.log(err);
-		res.status(500).send("500 error - server error");
+router.get("/:id", async (req: Request, res) => {
+	console.log(`Request URL Param: ${req.params.id}`);
+	console.log(`This is a get operation`);
+
+	const id = parseInt(req.params.id);
+
+	if (isNaN(id)) {
+		res.status(400).send("Wrong id");
+		return;
 	}
+
+	const pizza = await getPizzaById(id);
+
+	return res.status(200).json(pizza);
 });
 
-route.get("/:id", async (req, res) => {
-	try {
-		const id: number = parseInt(req.params.id);
-		if (isNaN(id)) {
-			res.status(400).send("400 error - bad request");
-			return;
-		}
-		const data = await getPizza(id);
-		if (data.length === 0) {
-			res.status(404).send("404 error - pizza not found");
-		} else {
-			res.status(200).json(data);
-		}
-	} catch (err) {
-		console.log(err);
-		res.status(500).send("500 error - server error");
+router.post("", async (req, res) => {
+	console.log(`This is a post operation`);
+
+	const pizza = await createPizza(req.body);
+
+	return res.status(201).json(pizza);
+});
+
+router.put("/:id", async (req, res) => {
+	console.log(`Request URL Param: ${req.params.id}`);
+	console.log(`This is a put operation`);
+
+	const id = parseInt(req.params.id);
+
+	if (isNaN(id)) {
+		res.status(400).send("Wrong id");
+		return;
 	}
+
+	const pizza = await updatePizzaById(id, req.body);
+
+	return res.status(200).json(pizza);
 });
 
-export default route;
+router.delete("/:id", async (req, res) => {
+	console.log(`Request URL Param: ${req.params.id}`);
+	console.log(`This is a delete operation`);
+
+	const id = parseInt(req.params.id);
+
+	if (isNaN(id)) {
+		res.status(400).send("Wrong id");
+		return;
+	}
+
+	const pizza = await deletePizzaById(id);
+
+	return res.status(200).json(pizza);
+});
+
+export default router;
